@@ -1,0 +1,250 @@
+------------------------------------------------
+-- TEXTBOX VALUES
+------------------------------------------------
+
+text1 = ""
+
+text2 = ""
+
+------------------------------------------------
+-- RESULT
+------------------------------------------------
+
+result = 0
+
+------------------------------------------------
+-- ACTIVE TEXTBOX
+------------------------------------------------
+
+activeBox = 0
+
+function setup()
+    
+end
+
+function draw()
+    
+    background(30,30,40)
+    
+    ------------------------------------------------
+    -- TITLE
+    ------------------------------------------------
+    
+    fill(255)
+    
+    fontSize(30)
+    
+    text("ASTM TABLE 54B",
+    WIDTH/2,
+    HEIGHT-100)
+    
+    fill(255)
+    
+    fontSize(20)
+    
+    text("Weight Conversion Factor ( Product )",
+    WIDTH/2,
+    HEIGHT-130)
+     
+    fill(255)
+    
+    fontSize(15)
+    
+    text("Density @ 15C ( KG/L)",
+    WIDTH/2,
+    HEIGHT-210)
+    
+    fill(255)
+    
+    fontSize(15)
+    
+    text("Temperature ( Deg; C )",
+    WIDTH/2,
+    HEIGHT-340)
+    ------------------------------------------------
+    -- TEXTBOX 1
+    ------------------------------------------------
+    
+    if activeBox == 1 then
+        fill(0,150,255)
+    else
+        fill(255)
+    end
+    
+    rect(100,
+    HEIGHT/2 + 160,
+    WIDTH-200,
+    50)
+    
+    fill(0)
+    
+    fontSize(35)
+    
+    text(text1,
+    WIDTH/2,
+    HEIGHT/2 + 185)
+ ------------------------------------------------
+    -- TEXTBOX 2
+    ------------------------------------------------
+    
+    if activeBox == 2 then
+        fill(0,150,255)
+    else
+        fill(255)
+    end
+    
+    rect(100,
+    HEIGHT/2 + 30,
+    WIDTH-200,
+    50)
+    
+    fill(0)
+    
+    text(text2,
+    WIDTH/2,
+    HEIGHT/2 + 55)
+    
+    ------------------------------------------------
+    -- RESULT
+    ------------------------------------------------
+    
+    fill(0, 255, 217)
+    
+    fontSize(40)
+    
+    text("VCF : "..result,
+    WIDTH/2,
+    HEIGHT/2 - 30)
+    
+    ------------------------------------------------
+    -- INFO
+    ------------------------------------------------
+    
+    fill(255)
+    
+    fontSize(25)
+    
+    text("Decimal supported (Example 12.5)",
+    WIDTH/2,
+    120)
+    
+end
+
+------------------------------------------------
+-- TOUCH
+------------------------------------------------
+
+function touched(touch)
+    
+    ------------------------------------------------
+    -- SELECT TEXTBOX 1
+    ------------------------------------------------
+    
+    if touch.x > 100 and
+    touch.x < WIDTH-100 and
+    
+    touch.y > HEIGHT/2 + 120 and
+    touch.y < HEIGHT/2 + 200 and
+    
+    touch.state == ENDED then
+        
+        activeBox = 1
+        
+        showKeyboard()
+        
+    end
+    
+    ------------------------------------------------
+    -- SELECT TEXTBOX 2
+    ------------------------------------------------
+    
+    if touch.x > 100 and
+    touch.x < WIDTH-100 and
+    
+    touch.y > HEIGHT/2 - 20 and
+    touch.y < HEIGHT/2 + 60 and
+    
+    touch.state == ENDED then
+        
+        activeBox = 2
+        
+        showKeyboard()
+        
+    end
+    
+end
+
+------------------------------------------------
+-- KEYBOARD INPUT
+------------------------------------------------
+
+function keyboard(key)
+    
+    ------------------------------------------------
+    -- BACKSPACE
+    ------------------------------------------------
+    
+    if key == BACKSPACE then
+        
+        if activeBox == 1 then
+            
+            text1 =
+            string.sub(text1,
+            1,
+            #text1-1)
+            
+        end
+        
+        if activeBox == 2 then
+            
+            text2 =
+            string.sub(text2,
+            1,
+            #text2-1)
+            
+        end
+        
+    else
+        
+        ------------------------------------------------
+        -- NUMBER ONLY
+        ------------------------------------------------
+        
+        if tonumber(key) ~= nil or key == "." then
+            
+            if activeBox == 1 then
+                
+                if key ~= "." or string.find(text1,"%.")== nil then
+                    
+                text1 =
+                text1 .. key
+                end 
+                
+            end
+            
+            if activeBox == 2 then
+               
+                if key ~= "." or string.find(text2,"%.")== nil then
+                    
+                text2 =
+                text2 .. key
+                
+                end
+                
+            end
+            
+        end
+        
+    end
+    
+    ------------------------------------------------
+    -- AUTO CALCULATE
+    ------------------------------------------------
+    
+    local n1 = tonumber(text1) or 0
+    local n2 = tonumber(text2) or 0
+    
+    result = n1 + n2
+    
+end
+
